@@ -1,6 +1,6 @@
 version: 2
 jobs:
-  build-clamav-image:
+  build:
     docker:
       - image: circleci/ruby:2.6 # this doesn't matter, just using for consistency.
     steps:
@@ -8,13 +8,18 @@ jobs:
       - setup_remote_docker:
           docker_layer_caching: true
       - run: |
+          set -e
           rev=$(git rev-parse --short HEAD)
           docker build -t logindotgov/secops-clamav:latest -t logindotgov/secops-clamav:"${rev}" .
-          echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
+
+          # run a test to make sure that clamav works!  set -e should make this bomb out if it fails.
+          docker run logindotgov/secops-clamav:latest ./test.sh
+
+          echo $DOCKER_TOKEN | docker login -u $DOCKER_USER --password-stdin
           docker push logindotgov/secops-clamav:"${rev}"
           docker push logindotgov/secops-clamav:latest
 workflows:
   version: 2
   release:
     jobs:
-      - build-clamav-image
+      - build

@@ -1,4 +1,4 @@
-#!/usr/bin/env /bin/sh
+#!/bin/sh
 # Perform a scan, but only if one isn't already in progress
 LOCK="/tmp/clamscan.lock"
 
@@ -7,7 +7,7 @@ if [ -f "$LOCK" ];then
   exit
 else
   touch $LOCK
-  echo `date` Starting scan |tee -a /logs/clamscan.log
+  echo "$(date)" Starting scan |tee -a /logs/clamscan.log
   clamscan \
     --verbose \
     --stdout \
@@ -16,5 +16,7 @@ else
     --exclude=/host-fs/dev \
     --exclude=/host-fs/sys \
     /host-fs
+  SCANRETVAL="$?"
   rm $LOCK
+  exit "$SCANRETVAL"
 fi

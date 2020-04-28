@@ -12,5 +12,6 @@ RUN apk add --no-cache rsyslog wget clamav=$CLAM_VERSION clamav-libunrar=$CLAM_V
     echo `date`: File created >> /logs/clamscan.log && \
     chmod +rw /var/lib/clamav* && \
     chmod +x /health.sh /scan.sh /start.sh
+RUN freshclam
 
 CMD /start.sh

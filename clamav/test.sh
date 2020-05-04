@@ -17,8 +17,10 @@ if ! /scan.sh ; then
 	exit 1
 fi
 
-timeout 60 clamonacc --foreground > /tmp/accesslog.out 2>&1
+timeout 60 clamonacc --foreground > /tmp/accesslog.out 2>&1 &
+sleep 5
 wget -O /host-fs/eicar.com https://secure.eicar.org/eicar.com.txt || exit 1
+sleep 60
 if grep -v EICAR /tmp/accesslog.out ; then
 	echo "clamonacc should have found /host-fs/eicar.com"
 	exit 1

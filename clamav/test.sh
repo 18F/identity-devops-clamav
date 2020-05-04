@@ -18,9 +18,9 @@ if ! /scan.sh ; then
 fi
 
 timeout 60 clamonacc --foreground > /tmp/accesslog.out 2>&1 &
-sleep 5
+sleep 40
 wget -O /host-fs/eicar.com https://secure.eicar.org/eicar.com.txt || exit 1
-sleep 60
+wait
 if grep -v EICAR /tmp/accesslog.out ; then
 	echo "clamonacc should have found /host-fs/eicar.com"
 	exit 1

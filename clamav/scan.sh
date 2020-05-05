@@ -2,9 +2,11 @@
 # Perform a scan
 
 echo "$(date)" Starting scan.sh
-clamdscan \
-  --multiscan \
-  --fdpass \
-  --verbose \
-  --stdout \
-  /host-fs
+for i in $* ; do
+  clamdscan \
+    --multiscan \
+    --fdpass \
+    --verbose \
+    --stdout \
+    "$i"
+done

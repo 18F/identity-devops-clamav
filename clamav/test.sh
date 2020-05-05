@@ -19,10 +19,6 @@ else
 	fi
 fi
 
-# access the file to trigger clamd scan on access
-cat /host-fs/eicar.com >/dev/null
-sleep 2
-
 # test to make sure that it doesn't get any false positives if there are no viruses
 rm -f /host-fs/eicar.com
 if ! /scan.sh >/dev/null 2>&1 ; then
@@ -30,9 +26,9 @@ if ! /scan.sh >/dev/null 2>&1 ; then
 	exit 1
 fi
 
-# check if clamonacc spotted EICAR
+# check if inotify scan spotted EICAR
 if ! grep EICAR /tmp/accesslog.out >/dev/null ; then
-	echo "clamonacc should have found /host-fs/eicar.com"
+	echo "inotifywait should have found /host-fs/eicar.com"
 	exit 1
 fi
 

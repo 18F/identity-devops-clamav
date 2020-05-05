@@ -14,6 +14,7 @@ sleep 50
 /scan.sh
 
 # start up inotifywait and scan files that are created or updated
+# Filter out stuff that is noisy and known to be normal activity.
 sysctl fs.inotify.max_user_watches=524288
 inotifywait -r -m --exclude '\/host-fs\/dev\/|\/host-fs\/proc\/|\/host-fs\/sys\/|\/index\/_|translog\/translog.ckp|\/host-fs\/run\/containerd\/io.containerd.runtime.v1.linux/moby.*\.pid$|\/host-fs\/run\/docker\/.*-stdout$|\/host
 -fs\/run\/docker\/.*-stderr|\/host-fs\/run\/containerd\/io.containerd.runtime.v1.linux\/moby\/.*\/log.json$|/host-fs/run/docker/runtime-runc/moby\/.*runc\.[a-zA-Z0-9]*$' -e close_write -e create --format %w%f /host-fs | while read line ; do

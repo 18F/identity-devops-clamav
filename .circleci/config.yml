@@ -11,7 +11,7 @@ jobs:
           docker build -t logindotgov/secops-clamav:$CIRCLE_BRANCH -t logindotgov/secops-clamav:$CIRCLE_SHA1 .
       - run: |
           # run a test to make sure that clamav works!
-          docker run logindotgov/secops-clamav:$CIRCLE_BRANCH /test.sh
+          docker run --cap-add SYS_ADMIN logindotgov/secops-clamav:$CIRCLE_BRANCH /test.sh
       - run: |
           # push it to the repo if the test passes
           echo $DOCKER_PASSWORD | docker login -u $DOCKER_USER --password-stdin

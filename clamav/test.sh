@@ -3,7 +3,9 @@
 # get things running and wait until they are going
 /start.sh > /tmp/accesslog.out 2>&1 &
 echo "sleeping until clamav is ready for testing"
-sleep 60
+until clamdscan --no-summary --fdpass --stdout --infected /etc/passwd >/dev/null 2>&1 ; do
+	sleep 2
+done
 
 # get the latest EICAR test file which should get spotted in a scan
 mkdir -p /host-fs

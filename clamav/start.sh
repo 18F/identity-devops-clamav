@@ -17,13 +17,16 @@ done
 sysctl fs.inotify.max_user_watches=524288
 
 # watch non-docker system
-inotifywait -e close_write -e create --format %w%f -r -m --exclude '\/host-fs\/var\/lib\/docker\/|\/host-fs\/proc\/|\/host-fs\/sys\/|\/host-fs\/dev\/' /host-fs | while read line ; do
-	clamdscan --no-summary --fdpass --stdout --infected "$line"
-done
+watchnondocker() {
+	inotifywait -e close_write -e create --format %w%f -r -m --exclude '\/host-fs\/var\/lib\/docker\/|\/host-fs\/proc\/|\/host-fs\/sys\/|\/host-fs\/dev\/' /host-fs | while read line ; do
+		clamdscan --no-summary --fdpass --stdout --infected "$line"
+	done
+}
+watchnondocker &
 
 # watch docker containers filesystems.  Once an hour, restart so that we get new containers.
 # exclude some stuff that we know is fine (just elasticsearch stuff for now)
-watchem() {
+watchdocker() {
 	inotifywait -e close_write -e create --format %w%f -r -m --exclude '/host-fs/var/lib/kubelet/plugins/kubernetes.io/csi/pv/.*/globalmount/nodes' "$1" | while read line ; do
 		clamdscan --no-summary --fdpass --stdout --infected "$line"
 	done
@@ -32,12 +35,12 @@ while true ; do
 	PIDS=""
 	# watch docker filesystems
 	for i in /host-fs/var/lib/docker/overlay2/*/merged ; do
-		watchem "$i" &
+		watchdocker "$i" &
 		PIDS="$PIDS $!"
 	done
 	# watch persistent volumes
 	for i in /host-fs/var/lib/kubelet/plugins/kubernetes.io/csi/pv/* ; do
-		watchem "$i" &
+		watchdocker "$i" &
 		PIDS="$PIDS $!"
 	done
 

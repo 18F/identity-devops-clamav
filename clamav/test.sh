@@ -7,7 +7,7 @@ until clamdscan --no-summary --fdpass --stdout --infected /etc/passwd >/dev/null
 	sleep 2
 done
 
-# get the latest EICAR test file which should get spotted in a scan
+# get the latest EICAR test file which should get spotted
 mkdir -p /host-fs/var/lib/docker/overlay2/xxx/merged
 wget -O /host-fs/var/lib/docker/overlay2/xxx/merged/eicar.com https://secure.eicar.org/eicar.com.txt || exit 1
 

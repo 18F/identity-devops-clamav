@@ -12,9 +12,6 @@ until clamdscan --no-summary --fdpass --stdout --infected /etc/passwd >/dev/null
 	sleep 2
 done
 
-# do an initial full scan on everything
-/scan.sh  /host-fs/var/lib/docker/overlay2/*/merged  /host-fs/var/lib/kubelet/plugins/kubernetes.io/csi/pv/*
-
 # start up inotifywait and scan files that are created
 # Filter out stuff that is noisy and known to be normal activity.
 sysctl fs.inotify.max_user_watches=524288

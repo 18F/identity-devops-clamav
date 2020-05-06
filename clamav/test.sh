@@ -22,7 +22,7 @@ else
 fi
 
 # test to make sure that it doesn't get any false positives if there are no viruses
-rm -f /host-fs/eicar.com
+rm -f /host-fs/var/lib/docker/overlay2/xxx/merged/eicar.com
 if ! /scan.sh /host-fs >/dev/null 2>&1 ; then
 	echo "scan.sh found a virus when it should not have"
 	exit 1

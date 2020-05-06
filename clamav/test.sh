@@ -8,10 +8,10 @@ until clamdscan --no-summary --fdpass --stdout --infected /etc/passwd >/dev/null
 done
 
 # get the latest EICAR test file which should get spotted in a scan
-mkdir -p /host-fs
-wget -O /host-fs/eicar.com https://secure.eicar.org/eicar.com.txt || exit 1
+mkdir -p /host-fs/var/lib/docker/overlay2/xxx/merged
+wget -O /host-fs/var/lib/docker/overlay2/xxx/merged/eicar.com https://secure.eicar.org/eicar.com.txt || exit 1
 
-if /scan.sh >/tmp/scan.out 2>&1 ; then
+if /scan.sh /host-fs >/tmp/scan.out 2>&1 ; then
 	echo "scan.sh did not find any viruses, but should have found /host-fs/eicar.com"
 	exit 1
 else
@@ -23,14 +23,14 @@ fi
 
 # test to make sure that it doesn't get any false positives if there are no viruses
 rm -f /host-fs/eicar.com
-if ! /scan.sh >/dev/null 2>&1 ; then
+if ! /scan.sh /host-fs >/dev/null 2>&1 ; then
 	echo "scan.sh found a virus when it should not have"
 	exit 1
 fi
 
 # check if inotify scan spotted EICAR
 if ! grep EICAR /tmp/accesslog.out >/dev/null ; then
-	echo "inotifywait should have found /host-fs/eicar.com"
+	echo "inotifywait should have found /host-fs/var/lib/docker/overlay2/xxx/merged/eicar.com"
 	exit 1
 fi
 

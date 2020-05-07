@@ -1,0 +1,9 @@
+/host-fs/var/lib/filebeat-filebeat-kube-system-data/registry/filebeat/data.json.new
+/host-fs/var/lib/docker/overlay2/.*/merged/tmp/clamav-.*\.tmp
+/host-fs/run/docker/containerd/.*/.*-stdout
+/host-fs/run/docker/containerd/.*/.*-stderr
+/host-fs/run/containerd/io\.containerd\.runtime\.v1\.linux/moby/.*/.*\.pid
+/host-fs/run/docker/runtime-runc/moby/.*/runc\..*
+/host-fs/var/lib/docker/overlay2/.*/merged/dev/null
+/host-fs/var/lib/kubelet/plugins/kubernetes.io/csi/pv/.*/globalmount/nodes
+/host-fs/var/lib/rsyslog/imjournal.state.tmp

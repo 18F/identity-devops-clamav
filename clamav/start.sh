@@ -18,7 +18,7 @@ sysctl fs.inotify.max_user_watches=524288
 
 # watch non-docker system
 watchnondocker() {
-	inotifywait -e close_write -e create --format %w%f -r -m --exclude '\/host-fs\/var\/lib\/docker\/|\/host-fs\/proc\/|\/host-fs\/sys\/|\/host-fs\/dev\/' /host-fs | while read line ; do
+	inotifywait -e close_write -e create --format %w%f -r -m --exclude '\/host-fs\/var\/lib\/docker\/|\/host-fs\/proc\/|\/host-fs\/sys\/|\/host-fs\/dev\/|\/host-fs\/run\/' /host-fs | grep -vFf /ignore.txt | while read line ; do
 		clamdscan --no-summary --fdpass --stdout --infected "$line" 2>&1 | grep -v ': OK'
 	done
 }
@@ -27,7 +27,7 @@ watchnondocker &
 # watch docker containers filesystems.  Once an hour, restart so that we get new containers.
 # exclude some stuff that we know is fine (just elasticsearch stuff for now)
 watchdocker() {
-	inotifywait -e close_write -e create --format %w%f -r -m --exclude '/host-fs/var/lib/kubelet/plugins/kubernetes.io/csi/pv/.*/globalmount/nodes' "$1" | while read line ; do
+	inotifywait -e close_write -e create --format %w%f -r -m "$1" | grep -vFf /ignore.txt | while read line ; do
 		clamdscan --no-summary --fdpass --stdout --infected "$line" 2>&1 | grep -v ': OK'
 	done
 }

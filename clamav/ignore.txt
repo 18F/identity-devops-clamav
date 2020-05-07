@@ -9,3 +9,4 @@
 /host-fs/var/lib/rsyslog/imjournal.state.tmp
 /host-fs/var/lib/kubelet/pods/.*/volumes/kubernetes.io~csi/pvc-.*/mount/nodes/0/indices/.*/[0-9]*/
 /host-fs/tmp/runc-process.*
+/host-fs/var/lib/docker/overlay2/.*/merged/sys
